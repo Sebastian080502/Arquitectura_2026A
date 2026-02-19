@@ -8,7 +8,7 @@
 - Leonado Fabio Perez Bermudez
 - Juan Camilo Cruz Pardo
 
-# 🟡 FASE 2 – Análisis de Anti-Patrones y Malas Prácticas
+# FASE 2 – Análisis de Anti-Patrones y Malas Prácticas
 
 ## 🎯 Objetivo
 
@@ -29,7 +29,6 @@ Analizar el sistema monolítico e identificar anti-patrones y malas prácticas c
 Archivo analizado:
 
 EncuestaController.java
-
 
 ---
 
@@ -124,43 +123,31 @@ No existen capas separadas como:
 
 El controlador:
 
-Maneja lógica de negocio
-
-Gestiona conexión a BD
-
-Ejecuta SQL
-
-Valida datos
-
-Maneja errores
-
-Construye respuestas
+- Maneja lógica de negocio
+- Gestiona conexión a BD
+- Ejecuta SQL
+- Valida datos
+- Maneja errores
+- Construye respuestas
 
 🔎 Problema
 
 Un controlador debería:
+1. Recibir la request
+2. Delegar la lógica al Service
+3. Retornar la respuesta
+- Actualmente hace múltiples responsabilidades.
 
-Recibir la request
+# ⚠ Impacto
 
-Delegar la lógica al Service
+- Código difícil de mantener
+- Baja cohesión
+- Alto acoplamiento
+- Difícil evolución futura
 
-Retornar la respuesta
+## 🧼 4. CLEAN CODE
 
-Actualmente hace múltiples responsabilidades.
-
-⚠ Impacto
-
-Código difícil de mantener
-
-Baja cohesión
-
-Alto acoplamiento
-
-Difícil evolución futura
-
-🧼 4. CLEAN CODE
-
-❌ 4.1 Código Duplicado
+# ❌ 4.1 Código Duplicado
 
 Ejemplo de validaciones repetidas:
 ```java
@@ -170,22 +157,18 @@ Este patrón se repite en múltiples métodos.
 
 🔎 Problema
 
-Validaciones repetidas.
+1. Validaciones repetidas.
+2. No existe método reutilizable.
+3. No se centraliza la lógica.
 
-No existe método reutilizable.
+# ⚠ Impacto
 
-No se centraliza la lógica.
+- Mayor probabilidad de errores.
+- Código más largo de lo necesario.
+- Difícil mantenimiento.
 
-⚠ Impacto
-
-Mayor probabilidad de errores.
-
-Código más largo de lo necesario.
-
-Difícil mantenimiento.
-
-🚨 5. MANEJO DE ERRORES
-❌ 5.1 Uso de printStackTrace() y return null
+## 🚨 5. MANEJO DE ERRORES
+# ❌ 5.1 Uso de printStackTrace() y return null
 ```java
 catch (Exception e) {
     e.printStackTrace();
@@ -195,212 +178,167 @@ return null;
 
 🔎 Problema
 
-Solo imprime el error en consola.
+1. Solo imprime el error en consola.
+2. Retorna null.
+3. No se devuelve un código HTTP adecuado.
+4. No se utiliza @ExceptionHandler.
 
-Retorna null.
+# ⚠ Impacto
 
-No se devuelve un código HTTP adecuado.
+- Respuestas inconsistentes.
+- Mala práctica REST.
+- Dificulta monitoreo y trazabilidad.
+- Riesgo de NullPointerException en cliente.
 
-No se utiliza @ExceptionHandler.
-
-⚠ Impacto
-
-Respuestas inconsistentes.
-
-Mala práctica REST.
-
-Dificulta monitoreo y trazabilidad.
-
-Riesgo de NullPointerException en cliente.
-
-🧮 6. TIPADO DEFICIENTE
-❌ 6.1 Uso de Map sin Genéricos ni DTOs
+## 🧮 6. TIPADO DEFICIENTE
+# ❌ 6.1 Uso de Map sin Genéricos ni DTOs
 ```java
 public Map crear(@RequestBody Map body)
 ```
 
 🔎 Problema
 
-Uso de Map sin tipado genérico.
+1. Uso de Map sin tipado genérico.
+2. No existen DTOs.
+3. No hay validación estructurada.
+4. No hay clases de dominio.
 
-No existen DTOs.
+# ⚠ Impacto
 
-No hay validación estructurada.
+- Pérdida de tipado fuerte.
+- Mayor riesgo de errores en tiempo de ejecución.
+- Código menos mantenible.
 
-No hay clases de dominio.
-
-⚠ Impacto
-
-Pérdida de tipado fuerte.
-
-Mayor riesgo de errores en tiempo de ejecución.
-
-Código menos mantenible.
-
-🚀 7. RENDIMIENTO
-❌ 7.1 Conexión BD Recreada en Cada Llamada
+##  🚀 7. RENDIMIENTO
+# ❌ 7.1 Conexión BD Recreada en Cada Llamada
 ```java
 private JdbcTemplate jdbc() {
     DriverManagerDataSource ds = new DriverManagerDataSource();
 ```
 
-Cada vez que se ejecuta un endpoint:
-
-Se crea un nuevo DataSource.
-
-Se crea un nuevo JdbcTemplate.
-
-Se genera una nueva conexión.
+- Cada vez que se ejecuta un endpoint:
+1. Se crea un nuevo DataSource.
+2. Se crea un nuevo JdbcTemplate.
+3. Se genera una nueva conexión.
 
 🔎 Problema
 
 No se utiliza:
 
-Pool de conexiones
+1. Pool de conexiones
+2. Configuración centralizada de DataSource
+# ⚠ Impacto
 
-Configuración centralizada de DataSource
+- Ineficiencia
+- Bajo rendimiento bajo carga
+- No escalable
 
-⚠ Impacto
+## 💻 ACTIVIDAD 2.2 – Análisis del Frontend (Angular)
 
-Ineficiencia
-
-Bajo rendimiento bajo carga
-
-No escalable
-
-💻 ACTIVIDAD 2.2 – Análisis del Frontend (Angular)
-
-Archivos analizados:
-
+- Archivos analizados:
+```java
 crear.component.ts
 
 encuesta.component.ts
 
 respuestas.component.ts
+```
 
-❌ 1. URL Hardcodeada
+# ❌ 1. URL Hardcodeada
 this.http.post("http://localhost:8081/crear", ...)
 
 🔎 Problema
 
-No se usa environment.ts.
+- No se usa environment.ts.
+- No hay configuración por entorno.
 
-No hay configuración por entorno.
+# ⚠ Impacto
 
-⚠ Impacto
+1. No portable a producción.
+2. Mala práctica de configuración.
 
-No portable a producción.
-
-Mala práctica de configuración.
-
-❌ 2. Uso Directo de HttpClient en el Component
+# ❌ 2. Uso Directo de HttpClient en el Component
 constructor(private http: HttpClient)
 
 🔎 Problema
 
-No existe una capa Service intermedia.
+1. No existe una capa Service intermedia.
+2. Se viola el patrón de arquitectura Angular recomendado.
 
-Se viola el patrón de arquitectura Angular recomendado.
+# ⚠ Impacto
 
-⚠ Impacto
+1. Violación del patrón Service.
+2. Lógica mezclada con presentación.
+3. Dificulta pruebas unitarias.
 
-Violación del patrón Service.
-
-Lógica mezclada con presentación.
-
-Dificulta pruebas unitarias.
-
-❌ 3. Manipulación Directa del DOM
+# ❌ 3. Manipulación Directa del DOM
 document.getElementById(...)
 
 🔎 Problema
 
 Angular debe utilizar:
 
-Data Binding
+1. Data Binding
+2. Directivas
+3. Templates reactivos
+4. Manipular el DOM directamente es un anti-patrón.
 
-Directivas
+# ⚠ Impacto
 
-Templates reactivos
+- Código menos mantenible.
+- Rompe el enfoque declarativo de Angular.
 
-Manipular el DOM directamente es un anti-patrón.
-
-⚠ Impacto
-
-Código menos mantenible.
-
-Rompe el enfoque declarativo de Angular.
-
-❌ 4. Uso Excesivo de any
+# ❌ 4. Uso Excesivo de any
 (r: any)
 
 🔎 Problema
 
-No hay interfaces tipadas.
+1. No hay interfaces tipadas.
+2. No hay modelos de datos.
+3. Se pierde el beneficio de TypeScript.
 
-No hay modelos de datos.
+# ⚠ Impacto
 
-Se pierde el beneficio de TypeScript.
+- Riesgo de errores.
+- Pérdida de autocompletado fuerte.
+- Código menos robusto.
 
-⚠ Impacto
-
-Riesgo de errores.
-
-Pérdida de autocompletado fuerte.
-
-Código menos robusto.
-
-❌ 5. Polling Manual con setInterval
+# ❌ 5. Polling Manual con setInterval
 
 Uso de:
-
+```java 
 setInterval(...)
 
 
 En lugar de:
 
-Observables
+- Observables
+- RxJS
+- AsyncPipe
+```
+# ⚠ Impacto
 
-RxJS
+- Código menos reactivo.
+- No aprovecha el paradigma Angular.
+- Posible consumo innecesario de recursos.
 
-AsyncPipe
-
-⚠ Impacto
-
-Código menos reactivo.
-
-No aprovecha el paradigma Angular.
-
-Posible consumo innecesario de recursos.
-
-📌 CONCLUSIÓN TÉCNICA – FASE 2
+# 📌 CONCLUSIÓN TÉCNICA – FASE 2
 
 El sistema presenta múltiples anti-patrones y malas prácticas:
 
-Vulnerabilidad a SQL Injection
+1. Vulnerabilidad a SQL Injection
+2. Credenciales hardcodeadas
+3. Violación del principio SRP
+4. Ausencia de arquitectura en capas
+5. Manejo deficiente de errores
+6. Bajo rendimiento por mala gestión de conexiones
+7. Uso incorrecto de patrones en Angular
 
-Credenciales hardcodeadas
+# Se trata de un monolito funcional pero mal estructurado, lo que justifica una refactorización arquitectónica hacia:
 
-Violación del principio SRP
-
-Ausencia de arquitectura en capas
-
-Manejo deficiente de errores
-
-Bajo rendimiento por mala gestión de conexiones
-
-Uso incorrecto de patrones en Angular
-
-Se trata de un monolito funcional pero mal estructurado, lo que justifica una refactorización arquitectónica hacia:
-
-Arquitectura en capas (Controller → Service → Repository)
-
-Uso de DTOs
-
-Configuración externa
-
-Uso de Prepared Statements
-
-Implementación de pool de conexiones
-
-Separación adecuada en frontend (Service layer)
+- Arquitectura en capas (Controller → Service → Repository)
+- Uso de DTOs
+- Configuración externa
+- Uso de Prepared Statements
+- Implementación de pool de conexiones
+- Separación adecuada en frontend (Service layer)
