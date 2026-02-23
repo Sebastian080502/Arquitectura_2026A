@@ -166,9 +166,9 @@ Este patrón se repite en múltiples métodos.
 - Mayor probabilidad de errores.
 - Código más largo de lo necesario.
 - Difícil mantenimiento.
-
-## 🚨 5. MANEJO DE ERRORES
-# ❌ 5.1 Uso de printStackTrace() y return null
+6
+🚨 5. MANEJO DE ERRORES
+❌ 5.1 Uso de printStackTrace() y return null
 ```java
 catch (Exception e) {
     e.printStackTrace();
@@ -178,45 +178,46 @@ return null;
 
 🔎 Problema
 
-1. Solo imprime el error en consola.
-2. Retorna null.
-3. No se devuelve un código HTTP adecuado.
-4. No se utiliza @ExceptionHandler.
+- Solo imprime el error en consola.
+- Retorna null.
+- No se devuelve un código HTTP adecuado.
+- No se utiliza @ExceptionHandler.
 
 # ⚠ Impacto
 
-- Respuestas inconsistentes.
-- Mala práctica REST.
-- Dificulta monitoreo y trazabilidad.
-- Riesgo de NullPointerException en cliente.
+Respuestas inconsistentes.
+Mala práctica REST.
+Dificulta monitoreo y trazabilidad.
+Riesgo de NullPointerException en cliente.
 
-## 🧮 6. TIPADO DEFICIENTE
-# ❌ 6.1 Uso de Map sin Genéricos ni DTOs
+🧮 6. TIPADO DEFICIENTE
+❌ 6.1 Uso de Map sin Genéricos ni DTOs
 ```java
 public Map crear(@RequestBody Map body)
 ```
 
 🔎 Problema
 
-1. Uso de Map sin tipado genérico.
-2. No existen DTOs.
-3. No hay validación estructurada.
-4. No hay clases de dominio.
+- Uso de Map sin tipado genérico.
+- No existen DTOs.
+- No hay validación estructurada.
+- No hay clases de dominio.
 
 # ⚠ Impacto
 
-- Pérdida de tipado fuerte.
-- Mayor riesgo de errores en tiempo de ejecución.
-- Código menos mantenible.
+Pérdida de tipado fuerte.
+Mayor riesgo de errores en tiempo de ejecución.
+Código menos mantenible.
 
-##  🚀 7. RENDIMIENTO
-# ❌ 7.1 Conexión BD Recreada en Cada Llamada
+🚀 7. RENDIMIENTO
+❌ 7.1 Conexión BD Recreada en Cada Llamada
 ```java
 private JdbcTemplate jdbc() {
     DriverManagerDataSource ds = new DriverManagerDataSource();
 ```
 
-- Cada vez que se ejecuta un endpoint:
+Cada vez que se ejecuta un endpoint:
+
 1. Se crea un nuevo DataSource.
 2. Se crea un nuevo JdbcTemplate.
 3. Se genera una nueva conexión.
@@ -225,120 +226,286 @@ private JdbcTemplate jdbc() {
 
 No se utiliza:
 
-1. Pool de conexiones
-2. Configuración centralizada de DataSource
+- Pool de conexiones
+- Configuración centralizada de DataSource
+
 # ⚠ Impacto
 
-- Ineficiencia
-- Bajo rendimiento bajo carga
-- No escalable
+Ineficiencia
+Bajo rendimiento bajo carga
+No escalable
 
-## 💻 ACTIVIDAD 2.2 – Análisis del Frontend (Angular)
+# 💻 ACTIVIDAD 2.2 – Análisis del Frontend (Angular)
 
-- Archivos analizados:
-```java
-crear.component.ts
+Archivos analizados:
 
-encuesta.component.ts
-
-respuestas.component.ts
-```
+- crear.component.ts
+- encuesta.component.ts
+- respuestas.component.ts
 
 # ❌ 1. URL Hardcodeada
 this.http.post("http://localhost:8081/crear", ...)
 
 🔎 Problema
 
-- No se usa environment.ts.
-- No hay configuración por entorno.
+No se usa environment.ts.
+No hay configuración por entorno.
 
 # ⚠ Impacto
+No portable a producción.
+Mala práctica de configuración.
 
-1. No portable a producción.
-2. Mala práctica de configuración.
-
-# ❌ 2. Uso Directo de HttpClient en el Component
+❌ 2. Uso Directo de HttpClient en el Component
 constructor(private http: HttpClient)
 
 🔎 Problema
 
-1. No existe una capa Service intermedia.
-2. Se viola el patrón de arquitectura Angular recomendado.
+No existe una capa Service intermedia.
+Se viola el patrón de arquitectura Angular recomendado.
 
 # ⚠ Impacto
 
-1. Violación del patrón Service.
-2. Lógica mezclada con presentación.
-3. Dificulta pruebas unitarias.
+Violación del patrón Service.
+Lógica mezclada con presentación.
+Dificulta pruebas unitarias.
 
-# ❌ 3. Manipulación Directa del DOM
+❌ 3. Manipulación Directa del DOM
 document.getElementById(...)
 
 🔎 Problema
 
 Angular debe utilizar:
 
-1. Data Binding
-2. Directivas
-3. Templates reactivos
-4. Manipular el DOM directamente es un anti-patrón.
+- Data Binding
+- Directivas
+- Templates reactivos
+- Manipular el DOM directamente es un anti-patrón.
 
 # ⚠ Impacto
 
-- Código menos mantenible.
-- Rompe el enfoque declarativo de Angular.
+Código menos mantenible.
+Rompe el enfoque declarativo de Angular.
 
-# ❌ 4. Uso Excesivo de any
+❌ 4. Uso Excesivo de any
 (r: any)
 
 🔎 Problema
 
-1. No hay interfaces tipadas.
-2. No hay modelos de datos.
-3. Se pierde el beneficio de TypeScript.
+No hay interfaces tipadas.
+No hay modelos de datos.
+Se pierde el beneficio de TypeScript.
 
 # ⚠ Impacto
 
-- Riesgo de errores.
-- Pérdida de autocompletado fuerte.
-- Código menos robusto.
+Riesgo de errores.
+Pérdida de autocompletado fuerte.
+Código menos robusto.
 
-# ❌ 5. Polling Manual con setInterval
+❌ 5. Polling Manual con setInterval
 
 Uso de:
-```java 
-setInterval(...)
 
+- setInterval(...)
 
 En lugar de:
 
 - Observables
 - RxJS
 - AsyncPipe
-```
+
 # ⚠ Impacto
 
-- Código menos reactivo.
-- No aprovecha el paradigma Angular.
-- Posible consumo innecesario de recursos.
+Código menos reactivo.
+No aprovecha el paradigma Angular.
+Posible consumo innecesario de recursos.
 
-# 📌 CONCLUSIÓN TÉCNICA – FASE 2
+# 📘 8. Instrumentos de Casos de Uso – Impacto Arquitectónico
 
-El sistema presenta múltiples anti-patrones y malas prácticas:
+## 8.1 Actores Identificados
 
-1. Vulnerabilidad a SQL Injection
-2. Credenciales hardcodeadas
-3. Violación del principio SRP
-4. Ausencia de arquitectura en capas
-5. Manejo deficiente de errores
-6. Bajo rendimiento por mala gestión de conexiones
-7. Uso incorrecto de patrones en Angular
+| Actor | Descripción |
+|--------|-------------|
+| Usuario (Votante) | Persona que crea encuestas y emite votos |
+| Sistema Backend | API REST que procesa las solicitudes |
+| Base de Datos | PostgreSQL que almacena encuestas y votos |
 
-# Se trata de un monolito funcional pero mal estructurado, lo que justifica una refactorización arquitectónica hacia:
+---
 
-- Arquitectura en capas (Controller → Service → Repository)
-- Uso de DTOs
-- Configuración externa
-- Uso de Prepared Statements
-- Implementación de pool de conexiones
-- Separación adecuada en frontend (Service layer)
+## 8.2 Casos de Uso Principales
+
+| ID | Caso de Uso | Endpoint | Método |
+|----|-------------|----------|--------|
+| CU-01 | Crear Encuesta | `/crear` | POST |
+| CU-02 | Listar Encuestas | `/encuestas` | GET |
+| CU-03 | Consultar Encuesta | `/encuesta/{id}` | GET |
+| CU-04 | Votar Encuesta | `/votar` | POST |
+
+---
+
+# 🔎 8.3 Análisis de Impacto por Caso de Uso
+
+---
+
+## 🟦 CU-01 – Crear Encuesta
+
+**Endpoint:** `POST /crear`  
+**Archivo:** `EncuestaController.java`  
+**Método:** `crear()`
+
+### Flujo Normal
+1. Usuario envía pregunta.
+2. Sistema valida longitud.
+3. Inserta encuesta en base de datos.
+4. Retorna ID y pregunta creada.
+
+### Anti-Patrones Detectados
+
+- SQL concatenado (vulnerabilidad SQL Injection).
+- Uso de `Map` sin tipado.
+- Validaciones repetidas manualmente.
+- Uso de `return null` ante error.
+- Creación manual de `DataSource`.
+
+### Impacto Arquitectónico
+
+- 🔴 Riesgo crítico de seguridad (inyección SQL).
+- 🟠 Alta acoplación a infraestructura.
+- 🟠 Baja mantenibilidad.
+- 🟡 Difícil escalabilidad futura.
+
+---
+
+## 🟦 CU-02 – Listar Encuestas
+
+**Endpoint:** `GET /encuestas`  
+**Método:** `encuestas()`
+
+### Flujo Normal
+1. Sistema consulta todas las encuestas.
+2. Retorna lista ordenada por ID descendente.
+
+### Anti-Patrones Detectados
+
+- Validación innecesaria de URL dentro del método.
+- Retorno `null` ante error.
+- Re-creación de conexión en cada llamada.
+
+### Impacto Arquitectónico
+
+- 🟠 Ineficiencia por recreación de conexiones.
+- 🟡 Riesgo de respuestas inconsistentes.
+- 🟠 Violación del principio SRP.
+
+---
+
+## 🟦 CU-03 – Consultar Encuesta
+
+**Endpoint:** `GET /encuesta/{id}`  
+**Método:** `encuesta()`
+
+### Flujo Normal
+1. Usuario envía ID.
+2. Sistema consulta encuesta específica.
+3. Retorna datos con conteos.
+
+### Anti-Patrones Detectados
+
+- SQL concatenado con ID.
+- Validación manual repetida.
+- Manejo deficiente de errores.
+
+### Impacto Arquitectónico
+
+- 🔴 Vulnerabilidad potencial.
+- 🟠 Código duplicado.
+- 🟡 Falta de contrato de error HTTP.
+
+---
+
+## 🟦 CU-04 – Votar Encuesta
+
+**Endpoint:** `POST /votar`  
+**Método:** `votar()`
+
+### Flujo Normal
+1. Usuario envía ID y voto (SI/NO).
+2. Sistema actualiza contador.
+3. Retorna encuesta actualizada.
+
+### Anti-Patrones Detectados
+
+- SQL concatenado en UPDATE.
+- Uso de `Map` sin DTO.
+- Lógica condicional rígida.
+- Repetición de consulta final.
+
+### Impacto Arquitectónico
+
+- 🔴 Riesgo de manipulación de datos.
+- 🟠 Alta duplicación de lógica.
+- 🟠 Falta de extensibilidad (si se agregan más tipos de voto).
+
+---
+
+# 🔗 8.4 Relación Sistémica de Anti-Patrones
+
+Los problemas identificados no son aislados.
+
+La ausencia de arquitectura en capas provoca:
+
+- SQL dentro del Controller.
+- Creación manual de conexiones.
+- Validaciones repetidas.
+- Manejo de errores inconsistente.
+
+El uso de `Map` sin tipado genera:
+
+- Validaciones manuales repetitivas.
+- Falta de contratos explícitos.
+- Mayor probabilidad de errores en tiempo de ejecución.
+
+Esto demuestra que el sistema presenta un problema estructural de diseño arquitectónico, no simplemente errores puntuales de implementación.
+
+---
+
+# 📊 8.5 Matriz de Impacto por Caso de Uso
+
+| Caso de Uso | Seguridad | Arquitectura | Mantenibilidad | Escalabilidad |
+|-------------|------------|--------------|----------------|---------------|
+| CU-01 Crear | 🔴 Alta | 🟠 Alta | 🟠 Alta | 🟡 Media |
+| CU-02 Listar | 🟡 Media | 🟠 Alta | 🟠 Alta | 🟡 Media |
+| CU-03 Consultar | 🔴 Alta | 🟠 Alta | 🟠 Alta | 🟡 Media |
+| CU-04 Votar | 🔴 Alta | 🟠 Alta | 🟠 Alta | 🟠 Alta |
+
+---
+
+## 📌 Conclusión de Instrumentos de Casos de Uso
+
+Cada caso de uso del sistema se encuentra afectado por anti-patrones estructurales que comprometen:
+
+- Seguridad (SQL Injection).
+- Separación de responsabilidades.
+- Rendimiento bajo carga.
+- Evolución futura del sistema.
+
+# CONCLUSIÓN TÉCNICA – FASE 2
+
+- El sistema presenta múltiples anti-patrones y malas prácticas:
+- Vulnerabilidad a SQL Injection
+- Credenciales hardcodeadas
+- Violación del principio SRP
+- Ausencia de arquitectura en capas
+- Manejo deficiente de errores
+- Bajo rendimiento por mala gestión de conexiones
+- Uso incorrecto de patrones en Angular
+
+- Se trata de un monolito funcional pero mal estructurado, lo que justifica una refactorización arquitectónica hacia:
+
+1. Arquitectura en capas (Controller → Service → Repository)
+2. Uso de DTOs
+3. Configuración externa
+4. Uso de Prepared Statements
+5. Implementación de pool de conexiones
+6. Separación adecuada en frontend (Service layer)
+
+---
