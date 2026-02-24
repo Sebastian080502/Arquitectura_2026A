@@ -1,0 +1,8 @@
+@startuml
+title C4 - Contenedores (Nivel 2) - Estado Actual
+rectangle "Angular SPA\n(Frontend)" as FE
+rectangle "Spring Boot\n(EncuestaController)" as BE
+database "PostgreSQL\nDB encuestas" as DB
+FE --> BE : HTTP REST
+BE --> DB : JDBC (SQL en controller)
+@enduml

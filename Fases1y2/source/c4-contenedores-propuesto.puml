@@ -1,0 +1,23 @@
+@startuml
+title C4 - Contenedores (Nivel 2) - Propuesto
+rectangle "Angular SPA" as FE
+rectangle "API Gateway" as GW
+rectangle "survey-service" as SS
+rectangle "voting-service" as VS
+database "PostgreSQL\n(surveys)" as DB1
+database "PostgreSQL\n(votes)" as DB2
+rectangle "Service Discovery\n(Eureka/Consul)" as DISC
+rectangle "Config Server" as CFG
+queue "Message Broker\n(RabbitMQ/Kafka)" as MQ
+
+FE --> GW : HTTP
+GW --> SS : Route /surveys
+GW --> VS : Route /votes
+SS --> DB1
+VS --> DB2
+SS --> DISC
+VS --> DISC
+SS --> CFG
+VS --> CFG
+VS --> MQ : Publish VoteCast
+@enduml
