@@ -1,0 +1,11 @@
+@startuml
+title C4 - Contexto (Nivel 1) - Encuestas Espagueti
+actor "Usuario / Votante" as U
+rectangle "Encuestas Espagueti\n(Sistema)" as S {
+  [Angular SPA]
+  [Spring Boot API]
+  database "PostgreSQL" as DB
+}
+U --> S : Usa sistema\n(HTTP)
+S --> DB : Persistencia
+@enduml
